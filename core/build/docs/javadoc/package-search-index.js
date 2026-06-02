@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"se.idkollen.client"},{"l":"se.idkollen.client.endpoints"},{"l":"se.idkollen.client.models"}];updateSearchResults();
