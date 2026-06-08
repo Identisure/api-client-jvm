@@ -20,8 +20,8 @@ public class BankIdSeEndpoint {
     }
 
     /** Start a BankID SE phone authentication session. */
-    public CompletableFuture<BankIdSeStatus> phoneAuthAsync(BankIdSePhoneAuthRequest req) {
-        return client.post("/v3/bankid-se/phone/auth", req, BankIdSeStatus.class);
+    public CompletableFuture<BankIdSePhoneStatus> phoneAuthAsync(BankIdSePhoneAuthRequest req) {
+        return client.post("/v3/bankid-se/phone/auth", req, BankIdSePhoneStatus.class);
     }
 
     /** Start a BankID SE signing session. */
@@ -30,8 +30,8 @@ public class BankIdSeEndpoint {
     }
 
     /** Start a BankID SE phone signing session. */
-    public CompletableFuture<BankIdSeStatus> phoneSignAsync(BankIdSePhoneSignRequest req) {
-        return client.post("/v3/bankid-se/phone/sign", req, BankIdSeStatus.class);
+    public CompletableFuture<BankIdSePhoneStatus> phoneSignAsync(BankIdSePhoneSignRequest req) {
+        return client.post("/v3/bankid-se/phone/sign", req, BankIdSePhoneStatus.class);
     }
 
     /** Verify a scanned BankID SE QR code. */

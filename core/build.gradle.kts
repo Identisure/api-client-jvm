@@ -63,6 +63,10 @@ publishing {
     }
 }
 
+tasks.javadoc {
+    (options as StandardJavadocDocletOptions).addBooleanOption("Xdoclint:none", true)
+}
+
 signing {
     val key = providers.gradleProperty("signingKey").orNull
     val pwd = providers.gradleProperty("signingPassword").orNull

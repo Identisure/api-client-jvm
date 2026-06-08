@@ -30,7 +30,7 @@ public abstract sealed class BankIdSeStatus permits BankIdSeStatus.Pending, Bank
         public String name = "";
         public String givenName = "";
         public String surname = "";
-        public @Nullable String certStartDate;
+        public String certStartDate = "";
         public @Nullable String address;
         public @Nullable String companySignatoryText;
     }

@@ -96,7 +96,7 @@ public final class IdkollenClient {
             var req = baseRequest(path).post(reqBody).build();
 
             return execute(req, type);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             return CompletableFuture.failedFuture(new IdkollenError("json", 0, e.getMessage()));
         }
     }
