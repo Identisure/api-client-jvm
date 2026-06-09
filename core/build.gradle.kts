@@ -64,7 +64,11 @@ publishing {
 }
 
 tasks.javadoc {
-    (options as StandardJavadocDocletOptions).addBooleanOption("Xdoclint:none", true)
+    val opts = options as StandardJavadocDocletOptions
+    opts.addBooleanOption("Xdoclint:none", true)
+    // Only document exported packages — hide se.idkollen.client.internal.
+    opts.addStringOption("-show-packages", "exported")
+    opts.addStringOption("-show-module-contents", "api")
 }
 
 signing {
