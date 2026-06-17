@@ -8,5 +8,3 @@ suspend fun DocumentEndpoint.uploadAsync(bytes: ByteArray, filename: String, mim
     upload(bytes, filename, mimeType).await()
 
 suspend fun DocumentEndpoint.downloadAsync(id: String): ByteArray = download(id).await()
-
-suspend fun DocumentEndpoint.deleteAsync(id: String) = delete(id).await()

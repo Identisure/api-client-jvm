@@ -49,9 +49,4 @@ public class DocumentEndpoint {
     public CompletableFuture<byte[]> download(String id) {
         return transport.getBytes("/v3/document/" + id);
     }
-
-    /** Delete a previously uploaded document. */
-    public CompletableFuture<Void> delete(String id) {
-        return transport.delete("/v3/document/" + id);
-    }
 }
