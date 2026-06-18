@@ -24,7 +24,7 @@ public abstract sealed class MitIdStatus permits MitIdStatus.Pending, MitIdStatu
     public static final class Completed extends MitIdStatus {
         public String id = "";
         public @Nullable String refId;
-        public String ssn = "";
+        public @Nullable String ssn;
         public String name = "";
         public String givenName = "";
         public String surname = "";

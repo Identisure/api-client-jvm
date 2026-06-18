@@ -25,7 +25,7 @@ public abstract sealed class BankIdNoStatus permits BankIdNoStatus.Pending, Bank
     public static final class Completed extends BankIdNoStatus {
         public String id = "";
         public @Nullable String refId;
-        public String ssn = "";
+        public @Nullable String ssn;
         public String name = "";
         public String givenName = "";
         public String surname = "";

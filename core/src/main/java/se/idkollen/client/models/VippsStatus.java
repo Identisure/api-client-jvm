@@ -23,7 +23,7 @@ public abstract sealed class VippsStatus permits VippsStatus.Pending, VippsStatu
     public static final class Completed extends VippsStatus {
         public String id = "";
         public @Nullable String refId;
-        public String ssn = "";
+        public @Nullable String ssn;
         public String name = "";
         public String givenName = "";
         public String surname = "";
