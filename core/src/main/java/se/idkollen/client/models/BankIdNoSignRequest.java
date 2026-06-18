@@ -17,10 +17,6 @@ public class BankIdNoSignRequest {
      * Document IDs to sign (from {@code /v3/document}). Mutually exclusive with {@code text}.
      */
     public @Nullable List<String> documents;
-    public @Nullable Boolean requestSsn;
-    public @Nullable Boolean requestPhone;
-    public @Nullable Boolean requestEmail;
-    public @Nullable Boolean requestAddress;
     public @Nullable String refId;
 
     public BankIdNoSignRequest setRedirectUrl(@Nullable String v) {
@@ -35,26 +31,6 @@ public class BankIdNoSignRequest {
 
     public BankIdNoSignRequest setDocuments(@Nullable List<String> v) {
         documents = v;
-        return this;
-    }
-
-    public BankIdNoSignRequest setRequestSsn(@Nullable Boolean v) {
-        requestSsn = v;
-        return this;
-    }
-
-    public BankIdNoSignRequest setRequestPhone(@Nullable Boolean v) {
-        requestPhone = v;
-        return this;
-    }
-
-    public BankIdNoSignRequest setRequestEmail(@Nullable Boolean v) {
-        requestEmail = v;
-        return this;
-    }
-
-    public BankIdNoSignRequest setRequestAddress(@Nullable Boolean v) {
-        requestAddress = v;
         return this;
     }
 
