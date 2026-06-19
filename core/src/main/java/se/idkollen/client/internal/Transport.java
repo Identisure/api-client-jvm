@@ -84,7 +84,7 @@ public final class Transport {
                 future.completeExceptionally(new IdkollenError("http", 0, e.getMessage()));
             }
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, Response response) {
                 try (response) {
                     if (response.isSuccessful()) {
                         var body = response.body();
@@ -93,6 +93,8 @@ public final class Transport {
                         var msg = response.body() != null ? response.body().string() : "";
                         future.completeExceptionally(new IdkollenError("api", response.code(), msg));
                     }
+                } catch (IOException e) {
+                    future.completeExceptionally(new IdkollenError("http", 0, e.getMessage()));
                 }
             }
         });
@@ -149,18 +151,20 @@ public final class Transport {
                 future.completeExceptionally(new IdkollenError("http", 0, e.getMessage()));
             }
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, Response response) {
                 try (response) {
                     var body = response.body() != null ? response.body().string() : "";
                     if (response.isSuccessful()) {
                         try {
                             future.complete(mapper.readValue(body, type));
-                        } catch (RuntimeException e) {
+                        } catch (IOException | RuntimeException e) {
                             future.completeExceptionally(new IdkollenError("json", 0, e.getMessage()));
                         }
                     } else {
                         future.completeExceptionally(new IdkollenError("api", response.code(), body));
                     }
+                } catch (IOException e) {
+                    future.completeExceptionally(new IdkollenError("http", 0, e.getMessage()));
                 }
             }
         });
@@ -177,7 +181,7 @@ public final class Transport {
                 future.completeExceptionally(new IdkollenError("http", 0, e.getMessage()));
             }
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, Response response) {
                 try (response) {
                     if (response.isSuccessful()) {
                         future.complete(null);
@@ -185,6 +189,8 @@ public final class Transport {
                         var msg = response.body() != null ? response.body().string() : "";
                         future.completeExceptionally(new IdkollenError("api", response.code(), msg));
                     }
+                } catch (IOException e) {
+                    future.completeExceptionally(new IdkollenError("http", 0, e.getMessage()));
                 }
             }
         });
