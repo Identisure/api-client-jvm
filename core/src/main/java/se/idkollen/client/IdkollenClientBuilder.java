@@ -30,7 +30,7 @@ public final class IdkollenClientBuilder {
 
     /** Override the API base URL. Takes precedence over {@link #environment(Environment)}. */
     public IdkollenClientBuilder baseUrl(String url) {
-        this.baseUrl = url;
+        this.baseUrl = url.replaceAll("/+$", "");
         return this;
     }
 
