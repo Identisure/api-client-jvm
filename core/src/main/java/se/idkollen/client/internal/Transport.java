@@ -103,7 +103,7 @@ public final class Transport {
     }
 
     public <T> CompletableFuture<T> poll(Supplier<CompletableFuture<T>> statusFn, Predicate<T> isPending, PollOptions opts) {
-        var deadline = System.currentTimeMillis() + opts.timeoutMs();
+        var deadline = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(opts.timeoutMs());
         var result = new CompletableFuture<T>();
         doPoll(statusFn, isPending, deadline, opts.intervalMs(), result);
         return result;
@@ -123,7 +123,7 @@ public final class Transport {
             if (!isPending.test(status)) {
                 result.complete(status); return;
             }
-            if (System.currentTimeMillis() >= deadline) {
+            if (System.nanoTime() - deadline >= 0) {
                 result.completeExceptionally(new IdkollenError("poll_timeout", 0, "Poll timed out"));
                 return;
             }
