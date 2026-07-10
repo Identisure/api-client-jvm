@@ -43,20 +43,21 @@ implementation("se.idkollen:idkollen-client-kotlin:0.1.0")
 ## Usage
 
 ```java
-import se.idkollen.client.IdkollenClient;
+import se.idkollen.client.Environment;
 import se.idkollen.client.IdkollenClientBuilder;
-import se.idkollen.client.PollOptions;
-import se.idkollen.client.endpoints.BankIdSeEndpoint;
 import se.idkollen.client.models.BankIdSeAuthRequest;
+import se.idkollen.client.models.BankIdSeStatus;
 
 void main() {
     var client = new IdkollenClientBuilder("client_id", "client_secret")
         .environment(Environment.STAGING)
         .build();
-    
-    client.bankIdSe().auth(new BankIdSeAuthRequest())
-        .thenCompose(session -> bankIdSe.waitForAuthAsync(session.id(), new PollOptions()))
-        .thenAccept(result -> System.out.println(result));
+    var bankIdSe = client.bankIdSe();
+
+    bankIdSe.auth(new BankIdSeAuthRequest())
+        .thenCompose(session -> bankIdSe.waitForAuth(((BankIdSeStatus.Pending) session).id))
+        .thenAccept(result -> System.out.println(result))
+        .join();
 }
 ```
 
@@ -67,13 +68,15 @@ import se.idkollen.client.*
 import se.idkollen.client.endpoints.*
 import se.idkollen.client.models.*
 
-val client = idkollenClient("client_id", "client_secret") {
-    environment(Environment.STAGING)
-}
+suspend fun main() {
+    val client = idkollenClient("client_id", "client_secret") {
+        environment(Environment.STAGING)
+    }
 
-val session = client.bankIdSe().auth(BankIdSeAuthRequest())
-val result  = client.bankIdSe().waitForAuth(session.id())
-println(result)
+    val session = client.bankIdSe().authAsync(BankIdSeAuthRequest()) as BankIdSeStatus.Pending
+    val result = client.bankIdSe().waitForAuthAsync(session.id)
+    println(result)
+}
 ```
 
 ## Development
