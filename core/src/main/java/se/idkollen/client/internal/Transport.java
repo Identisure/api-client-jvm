@@ -116,6 +116,10 @@ public final class Transport {
         long intervalMs,
         CompletableFuture<T> result
     ) {
+        if (result.isDone()) {
+            return;
+        }
+
         statusFn.get().whenComplete((status, err) -> {
             if (err != null) {
                 result.completeExceptionally(err); return;
