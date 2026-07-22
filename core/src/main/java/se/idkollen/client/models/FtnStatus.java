@@ -33,6 +33,8 @@ public abstract sealed class FtnStatus permits FtnStatus.Pending, FtnStatus.Comp
         public @Nullable String birthDate;
         public @Nullable String pid;
         public @Nullable String bankId;
+        public @Nullable String bankName;
+        public @Nullable String authenticatedAt;
     }
 
     /** Returned when the FTN session has failed. */

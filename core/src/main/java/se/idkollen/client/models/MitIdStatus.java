@@ -35,6 +35,8 @@ public abstract sealed class MitIdStatus permits MitIdStatus.Pending, MitIdStatu
         public @Nullable String pid;
         public @Nullable String bankId;
         public @Nullable SignResult signResult;
+        public @Nullable String authenticatedAt;
+        public @Nullable String signedAt;
     }
 
     /** Returned when the MitID session has failed. */

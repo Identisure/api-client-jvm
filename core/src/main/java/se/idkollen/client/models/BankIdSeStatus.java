@@ -33,6 +33,8 @@ public abstract sealed class BankIdSeStatus permits BankIdSeStatus.Pending, Bank
         public String certStartDate = "";
         public @Nullable String address;
         public @Nullable String companySignatoryText;
+        public @Nullable String authenticatedAt;
+        public @Nullable String signedAt;
     }
 
     /** Returned when the BankID SE session has failed. */

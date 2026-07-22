@@ -37,6 +37,8 @@ public abstract sealed class BankIdNoStatus permits BankIdNoStatus.Pending, Bank
         public @Nullable String bankId;
         public @Nullable SignResult signResult;
         public @Nullable List<SignedDocument> signedDocuments;
+        public @Nullable String authenticatedAt;
+        public @Nullable String signedAt;
     }
 
     /** Returned when the BankID NO session has failed. */

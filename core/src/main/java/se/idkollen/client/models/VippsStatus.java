@@ -33,6 +33,7 @@ public abstract sealed class VippsStatus permits VippsStatus.Pending, VippsStatu
         public @Nullable String birthDate;
         public @Nullable String pid;
         public @Nullable String bankId;
+        public @Nullable String authenticatedAt;
     }
 
     /** Returned when the Vipps session has failed. */

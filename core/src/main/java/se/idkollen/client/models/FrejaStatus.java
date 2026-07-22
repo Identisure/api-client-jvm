@@ -31,6 +31,8 @@ public abstract sealed class FrejaStatus permits FrejaStatus.Pending, FrejaStatu
         public String surname = "";
         public @Nullable String address;
         public @Nullable String companySignatoryText;
+        public @Nullable String authenticatedAt;
+        public @Nullable String signedAt;
     }
 
     /** Returned when the Freja eID session has failed. */
