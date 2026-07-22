@@ -31,10 +31,26 @@ public abstract sealed class BankIdSeStatus permits BankIdSeStatus.Pending, Bank
         public String givenName = "";
         public String surname = "";
         public String certStartDate = "";
+        public String ocspResponse = "";
+        public @Nullable String risk;
+        public @Nullable Device device;
+        public @Nullable StepUp stepUp;
         public @Nullable String address;
         public @Nullable String companySignatoryText;
         public @Nullable String authenticatedAt;
         public @Nullable String signedAt;
+    }
+
+    /** The user's device, as seen by BankID. */
+    public static final class Device {
+        public @Nullable String ipAddress;
+        public @Nullable String uhi;
+    }
+
+    /** Additional verifications performed before the order completed. */
+    public static final class StepUp {
+        public @Nullable Boolean mrtd;
+        public @Nullable Boolean face;
     }
 
     /** Returned when the BankID SE session has failed. */
