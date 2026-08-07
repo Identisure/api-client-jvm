@@ -1,17 +1,20 @@
 package se.idkollen.client.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 
 /** MitID session status. Discriminated by the {@code status} JSON field. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "status")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "status", visible = true, defaultImpl = MitIdStatus.Unknown.class)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = MitIdStatus.Pending.class, name = "PENDING"),
     @JsonSubTypes.Type(value = MitIdStatus.Completed.class, name = "COMPLETED"),
     @JsonSubTypes.Type(value = MitIdStatus.Failed.class, name = "FAILED"),
 })
-public abstract sealed class MitIdStatus permits MitIdStatus.Pending, MitIdStatus.Completed, MitIdStatus.Failed {
+public abstract sealed class MitIdStatus permits MitIdStatus.Pending, MitIdStatus.Completed, MitIdStatus.Failed, MitIdStatus.Unknown {
     /** Returned while the user has not yet acted. */
     public static final class Pending extends MitIdStatus {
         public String id = "";
@@ -49,5 +52,15 @@ public abstract sealed class MitIdStatus permits MitIdStatus.Pending, MitIdStatu
     /** Signing result returned in a completed MitID sign session. */
     public static final class SignResult {
         public String checksum = "";
+    }
+
+    /** A status this client version does not recognize. */
+    public static final class Unknown extends MitIdStatus {
+        public final String status;
+
+        @JsonCreator
+        public Unknown(@JsonProperty(value = "status", required = true) String status) {
+            this.status = Objects.requireNonNull(status, "Missing status field");
+        }
     }
 }

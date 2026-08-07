@@ -1,17 +1,20 @@
 package se.idkollen.client.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 
 /** BankID SE session status. Discriminated by the {@code status} JSON field. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "status")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "status", visible = true, defaultImpl = BankIdSeStatus.Unknown.class)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = BankIdSeStatus.Pending.class, name = "PENDING"),
     @JsonSubTypes.Type(value = BankIdSeStatus.Completed.class, name = "COMPLETED"),
     @JsonSubTypes.Type(value = BankIdSeStatus.Failed.class, name = "FAILED"),
 })
-public abstract sealed class BankIdSeStatus permits BankIdSeStatus.Pending, BankIdSeStatus.Completed, BankIdSeStatus.Failed {
+public abstract sealed class BankIdSeStatus permits BankIdSeStatus.Pending, BankIdSeStatus.Completed, BankIdSeStatus.Failed, BankIdSeStatus.Unknown {
     /** Returned while the user has not yet acted in the BankID app. */
     public static final class Pending extends BankIdSeStatus {
         public String id = "";
@@ -58,5 +61,15 @@ public abstract sealed class BankIdSeStatus permits BankIdSeStatus.Pending, Bank
         public String id = "";
         public @Nullable String refId;
         public ApiErrorCode error = ApiErrorCode.INTERNAL_ERROR;
+    }
+
+    /** A status this client version does not recognize. */
+    public static final class Unknown extends BankIdSeStatus {
+        public final String status;
+
+        @JsonCreator
+        public Unknown(@JsonProperty(value = "status", required = true) String status) {
+            this.status = Objects.requireNonNull(status, "Missing status field");
+        }
     }
 }

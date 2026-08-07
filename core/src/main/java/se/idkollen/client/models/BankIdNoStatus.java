@@ -1,18 +1,21 @@
 package se.idkollen.client.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 /** BankID NO session status. Discriminated by the {@code status} JSON field. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "status")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "status", visible = true, defaultImpl = BankIdNoStatus.Unknown.class)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = BankIdNoStatus.Pending.class, name = "PENDING"),
     @JsonSubTypes.Type(value = BankIdNoStatus.Completed.class, name = "COMPLETED"),
     @JsonSubTypes.Type(value = BankIdNoStatus.Failed.class, name = "FAILED"),
 })
-public abstract sealed class BankIdNoStatus permits BankIdNoStatus.Pending, BankIdNoStatus.Completed, BankIdNoStatus.Failed {
+public abstract sealed class BankIdNoStatus permits BankIdNoStatus.Pending, BankIdNoStatus.Completed, BankIdNoStatus.Failed, BankIdNoStatus.Unknown {
     /** Returned while the user has not yet acted. */
     public static final class Pending extends BankIdNoStatus {
         public String id = "";
@@ -59,5 +62,15 @@ public abstract sealed class BankIdNoStatus permits BankIdNoStatus.Pending, Bank
     public static final class SignedDocument {
         public String id = "";
         public String hash = "";
+    }
+
+    /** A status this client version does not recognize. */
+    public static final class Unknown extends BankIdNoStatus {
+        public final String status;
+
+        @JsonCreator
+        public Unknown(@JsonProperty(value = "status", required = true) String status) {
+            this.status = Objects.requireNonNull(status, "Missing status field");
+        }
     }
 }

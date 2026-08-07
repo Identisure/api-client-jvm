@@ -1,17 +1,20 @@
 package se.idkollen.client.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 
 /** Finnish Trust Network (FTN) session status. Discriminated by the {@code status} JSON field. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "status")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "status", visible = true, defaultImpl = FtnStatus.Unknown.class)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = FtnStatus.Pending.class, name = "PENDING"),
     @JsonSubTypes.Type(value = FtnStatus.Completed.class, name = "COMPLETED"),
     @JsonSubTypes.Type(value = FtnStatus.Failed.class, name = "FAILED"),
 })
-public abstract sealed class FtnStatus permits FtnStatus.Pending, FtnStatus.Completed, FtnStatus.Failed {
+public abstract sealed class FtnStatus permits FtnStatus.Pending, FtnStatus.Completed, FtnStatus.Failed, FtnStatus.Unknown {
     /** Returned while the user has not yet acted. */
     public static final class Pending extends FtnStatus {
         public String id = "";
@@ -42,5 +45,15 @@ public abstract sealed class FtnStatus permits FtnStatus.Pending, FtnStatus.Comp
         public String id = "";
         public @Nullable String refId;
         public ApiErrorCode error = ApiErrorCode.INTERNAL_ERROR;
+    }
+
+    /** A status this client version does not recognize. */
+    public static final class Unknown extends FtnStatus {
+        public final String status;
+
+        @JsonCreator
+        public Unknown(@JsonProperty(value = "status", required = true) String status) {
+            this.status = Objects.requireNonNull(status, "Missing status field");
+        }
     }
 }
