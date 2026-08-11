@@ -79,6 +79,12 @@ suspend fun main() {
 }
 ```
 
+### Verifying callbacks
+
+```java
+boolean valid = CallbackSignature.verify(rawBody, request.getHeader("X-Signature-SHA256"), hmacSecret);
+```
+
 ## Development
 
 #### Prerequisites
