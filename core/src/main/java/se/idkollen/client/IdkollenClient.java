@@ -1,6 +1,8 @@
 package se.idkollen.client;
 
 import okhttp3.OkHttpClient;
+
+import java.time.Duration;
 import se.idkollen.client.endpoints.*;
 import se.idkollen.client.internal.Transport;
 
@@ -13,8 +15,8 @@ import se.idkollen.client.internal.Transport;
 public final class IdkollenClient {
     private final Transport transport;
 
-    IdkollenClient(String baseUrl, String clientId, String clientSecret, String userAgent, OkHttpClient http) {
-        this.transport = new Transport(baseUrl, clientId, clientSecret, userAgent, http);
+    IdkollenClient(String baseUrl, String clientId, String clientSecret, String userAgent, Duration timeout, OkHttpClient http) {
+        this.transport = new Transport(baseUrl, clientId, clientSecret, userAgent, timeout, http);
     }
 
     /** Return the BankID SE endpoint accessor. */

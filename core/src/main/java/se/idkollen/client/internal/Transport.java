@@ -9,6 +9,7 @@ import se.idkollen.client.PollOptions;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.Base64;
 import java.util.concurrent.*;
 import java.util.function.Predicate;
@@ -37,14 +38,16 @@ public final class Transport {
     private final String baseUrl;
     private final String credentials;
     private final String userAgent;
+    private final Duration timeout;
     private final OkHttpClient http;
 
-    public Transport(String baseUrl, String clientId, String clientSecret, String userAgent, OkHttpClient http) {
+    public Transport(String baseUrl, String clientId, String clientSecret, String userAgent, Duration timeout, OkHttpClient http) {
         this.baseUrl = baseUrl;
         this.credentials = "Basic " + Base64.getEncoder()
             .encodeToString((clientId + ':' + clientSecret)
             .getBytes(StandardCharsets.UTF_8));
         this.userAgent = userAgent;
+        this.timeout = timeout;
         this.http = http;
     }
 
@@ -78,7 +81,7 @@ public final class Transport {
         var req = baseRequest(path).get().build();
         var future = new CompletableFuture<byte[]>();
 
-        http.newCall(req).enqueue(new Callback() {
+        newCall(req).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 future.completeExceptionally(new IdkollenError("http", 0, e.getMessage()));
@@ -139,6 +142,12 @@ public final class Transport {
         });
     }
 
+    private Call newCall(Request req) {
+        var call = http.newCall(req);
+        call.timeout().timeout(timeout.toNanos(), TimeUnit.NANOSECONDS);
+        return call;
+    }
+
     private Request.Builder baseRequest(String path) {
         return new Request.Builder()
             .url(baseUrl + path)
@@ -149,7 +158,7 @@ public final class Transport {
     private <T> CompletableFuture<T> execute(Request req, Class<T> type) {
         var future = new CompletableFuture<T>();
 
-        http.newCall(req).enqueue(new Callback() {
+        newCall(req).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 future.completeExceptionally(new IdkollenError("http", 0, e.getMessage()));
@@ -179,7 +188,7 @@ public final class Transport {
     private CompletableFuture<Void> executeVoid(Request req) {
         var future = new CompletableFuture<Void>();
 
-        http.newCall(req).enqueue(new Callback() {
+        newCall(req).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 future.completeExceptionally(new IdkollenError("http", 0, e.getMessage()));

@@ -2,6 +2,8 @@ package se.idkollen.client;
 
 import okhttp3.OkHttpClient;
 
+import java.time.Duration;
+
 /**
  * Fluent builder for {@link IdkollenClient}.
  *
@@ -15,6 +17,7 @@ public final class IdkollenClientBuilder {
     private final String clientSecret;
     private String baseUrl = Environment.PRODUCTION.baseUrl;
     private String userAgent = DEFAULT_USER_AGENT;
+    private Duration timeout = Duration.ofSeconds(30);
     private OkHttpClient httpClient;
 
     public IdkollenClientBuilder(String clientId, String clientSecret) {
@@ -40,6 +43,12 @@ public final class IdkollenClientBuilder {
         return this;
     }
 
+    /** Timeout for each HTTP request, including reading the response body. Must be positive. Default: 30 s. */
+    public IdkollenClientBuilder timeout(Duration timeout) {
+        this.timeout = timeout;
+        return this;
+    }
+
     /** Inject a pre-configured {@link OkHttpClient}. */
     public IdkollenClientBuilder httpClient(OkHttpClient http) {
         this.httpClient = http;
@@ -49,6 +58,6 @@ public final class IdkollenClientBuilder {
     /** Build the configured {@link IdkollenClient}. */
     public IdkollenClient build() {
         var http = httpClient != null ? httpClient : new OkHttpClient();
-        return new IdkollenClient(baseUrl, clientId, clientSecret, userAgent, http);
+        return new IdkollenClient(baseUrl, clientId, clientSecret, userAgent, timeout, http);
     }
 }
