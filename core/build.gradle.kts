@@ -21,6 +21,16 @@ dependencies {
     api("org.jspecify:jspecify:1.0.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.19.0")
+
+    testImplementation(platform("org.junit:junit-bom:6.1.3"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.test {
+    useJUnitPlatform()
+    systemProperty("idkollen.fixtures", rootDir.resolve("../fixtures").absolutePath)
 }
 
 publishing {
