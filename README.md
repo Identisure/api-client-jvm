@@ -89,7 +89,7 @@ boolean valid = CallbackSignature.verify(rawBody, request.getHeader("X-Signature
 
 #### Prerequisites
 
-* [Java 17+](https://www.oracle.com/java/technologies/downloads/)
+* [JDK 17](https://adoptium.net/)
 * [Kotlin 2+](https://kotlinlang.org/)
 
 #### Build
