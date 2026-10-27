@@ -1,6 +1,5 @@
 package com.identisure.client;
 
-import com.identisure.client.endpoints.*;
 import com.identisure.client.internal.Transport;
 import java.time.Duration;
 import okhttp3.OkHttpClient;

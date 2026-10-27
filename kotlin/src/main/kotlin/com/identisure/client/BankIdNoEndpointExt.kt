@@ -1,6 +1,5 @@
 package com.identisure.client
 
-import com.identisure.client.endpoints.BankIdNoEndpoint
 import com.identisure.client.models.*
 import kotlinx.coroutines.future.await
 

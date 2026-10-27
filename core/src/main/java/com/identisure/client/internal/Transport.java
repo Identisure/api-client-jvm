@@ -17,9 +17,8 @@ import okhttp3.*;
 /**
  * Internal HTTP helper used by endpoint classes. Not part of the public API.
  *
- * <p>The class is {@code public} only so that {@link com.identisure.client.IdentisureClient}
- * (in a different package) can construct one. All useful methods are package-private
- * to {@code com.identisure.client.endpoints} — consumers cannot invoke them.
+ * <p>The class is {@code public} only so that {@code com.identisure.client} can use it. The
+ * package is not exported from the module.
  *
  * @hidden
  */

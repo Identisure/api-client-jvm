@@ -1,6 +1,5 @@
-package com.identisure.client.endpoints;
+package com.identisure.client;
 
-import com.identisure.client.PollOptions;
 import com.identisure.client.internal.Transport;
 import com.identisure.client.models.*;
 import java.util.concurrent.CompletableFuture;
@@ -9,8 +8,7 @@ import java.util.concurrent.CompletableFuture;
 public class BankIdSeEndpoint {
     private final Transport transport;
 
-    @SuppressWarnings("exports") // Constructed by IdentisureClient; Transport is internal
-    public BankIdSeEndpoint(Transport transport) {
+    BankIdSeEndpoint(Transport transport) {
         this.transport = transport;
     }
 

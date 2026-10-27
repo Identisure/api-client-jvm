@@ -1,6 +1,5 @@
 package com.identisure.client
 
-import com.identisure.client.endpoints.DocumentEndpoint
 import com.identisure.client.models.DocumentUploadResponse
 import kotlinx.coroutines.future.await
 

@@ -6,6 +6,5 @@ module com.identisure.client {
     requires static transitive org.jspecify;
 
     exports com.identisure.client;
-    exports com.identisure.client.endpoints;
     exports com.identisure.client.models;
 }

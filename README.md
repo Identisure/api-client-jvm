@@ -65,7 +65,6 @@ void main() {
 
 ```kotlin
 import com.identisure.client.*
-import com.identisure.client.endpoints.*
 import com.identisure.client.models.*
 
 suspend fun main() {

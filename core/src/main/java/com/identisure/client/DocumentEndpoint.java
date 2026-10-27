@@ -1,4 +1,4 @@
-package com.identisure.client.endpoints;
+package com.identisure.client;
 
 import com.identisure.client.internal.Transport;
 import com.identisure.client.models.DocumentUploadResponse;
@@ -11,8 +11,7 @@ import okhttp3.RequestBody;
 public class DocumentEndpoint {
     private final Transport transport;
 
-    @SuppressWarnings("exports") // Constructed by IdentisureClient; Transport is internal
-    public DocumentEndpoint(Transport transport) {
+    DocumentEndpoint(Transport transport) {
         this.transport = transport;
     }
 
