@@ -1,4 +1,4 @@
-<img align="left" height="100" style="margin-right: 10px;" src="../img/icon.png">
+<img align="left" height="100" style="margin-right: 10px;" src="img/icon.png">
 
 # Identisure JVM Client
 
@@ -90,6 +90,13 @@ boolean valid = CallbackSignature.verify(rawBody, request.getHeader("X-Signature
 
 * [JDK 17](https://adoptium.net/)
 * [Kotlin 2+](https://kotlinlang.org/)
+
+The tests use shared fixtures from a git submodule. Clone with `--recurse-submodules`, or run
+`git submodule update --init` in an existing clone:
+
+```sh
+$ git clone --recurse-submodules https://github.com/identisure/api-client-jvm.git
+```
 
 #### Build
 

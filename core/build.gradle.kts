@@ -46,7 +46,7 @@ tasks.compileTestJava {
 
 tasks.test {
     useJUnitPlatform()
-    systemProperty("identisure.fixtures", rootDir.resolve("../fixtures").absolutePath)
+    systemProperty("identisure.fixtures", rootDir.resolve("fixtures").absolutePath)
 }
 
 publishing {
@@ -65,8 +65,8 @@ publishing {
                     }
                 }
                 scm {
-                    connection.set("scm:git:git://github.com/identisure/identisure-client-jvm.git")
-                    url.set("https://github.com/identisure/identisure-client-jvm")
+                    connection.set("scm:git:git://github.com/identisure/api-client-jvm.git")
+                    url.set("https://github.com/identisure/api-client-jvm")
                 }
             }
         }

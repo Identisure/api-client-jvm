@@ -50,7 +50,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 class EndToEndTest {
-    private static final Path FIXTURES = Path.of(System.getProperty("identisure.fixtures", "../../fixtures"));
+    private static final Path FIXTURES = Path.of(System.getProperty("identisure.fixtures", "../fixtures"));
     private static final PollOptions FAST_POLL = new PollOptions(1, 5_000);
     private static final String AUTHORIZATION = "Basic " + Base64.getEncoder().encodeToString("cid:secret".getBytes());
 
