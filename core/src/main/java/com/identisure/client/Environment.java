@@ -2,10 +2,10 @@ package com.identisure.client;
 
 /** Pre-configured API base URL selection. */
 public enum Environment {
-    /** Production environment: {@code https://api.identisure.com}. */
-    PRODUCTION("https://api.identisure.com"),
-    /** Staging environment: {@code https://stgapi.identisure.com}. */
-    STAGING("https://stgapi.identisure.com");
+    /** Production environment: {@code https://api.idkollen.se}. */
+    PRODUCTION("https://api.idkollen.se"),
+    /** Staging environment: {@code https://stgapi.idkollen.se}. */
+    STAGING("https://stgapi.idkollen.se");
 
     public final String baseUrl;
 
