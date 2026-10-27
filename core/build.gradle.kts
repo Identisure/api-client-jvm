@@ -4,7 +4,7 @@ plugins {
     signing
 }
 
-group = "se.idkollen"
+group = "com.identisure"
 version = "0.1.0"
 
 java {
@@ -30,18 +30,18 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-    systemProperty("idkollen.fixtures", rootDir.resolve("../fixtures").absolutePath)
+    systemProperty("identisure.fixtures", rootDir.resolve("../fixtures").absolutePath)
 }
 
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
-            artifactId = "idkollen-client-core"
+            artifactId = "identisure-client-core"
             pom {
-                name.set("IDkollen Client Core")
-                description.set("Java client for the IDkollen REST API")
-                url.set("https://idkollen.se")
+                name.set("Identisure Client Core")
+                description.set("Java client for the Identisure REST API")
+                url.set("https://identisure.com")
                 licenses {
                     license {
                         name.set("MIT License")
@@ -49,8 +49,8 @@ publishing {
                     }
                 }
                 scm {
-                    connection.set("scm:git:git://github.com/idkollen/idkollen-client-jvm.git")
-                    url.set("https://github.com/idkollen/idkollen-client-jvm")
+                    connection.set("scm:git:git://github.com/identisure/identisure-client-jvm.git")
+                    url.set("https://github.com/identisure/identisure-client-jvm")
                 }
             }
         }
@@ -76,7 +76,7 @@ publishing {
 tasks.javadoc {
     val opts = options as StandardJavadocDocletOptions
     opts.addBooleanOption("Xdoclint:none", true)
-    // Only document exported packages — hide se.idkollen.client.internal.
+    // Only document exported packages — hide com.identisure.client.internal.
     opts.addStringOption("-show-packages", "exported")
     opts.addStringOption("-show-module-contents", "api")
 }

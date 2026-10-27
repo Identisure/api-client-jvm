@@ -1,2 +1,2 @@
-rootProject.name = "idkollen-client"
+rootProject.name = "identisure-client"
 include("core", "kotlin")

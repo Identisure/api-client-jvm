@@ -4,7 +4,7 @@ plugins {
     signing
 }
 
-group = "se.idkollen"
+group = "com.identisure"
 version = "0.1.0"
 
 kotlin {
@@ -36,11 +36,11 @@ publishing {
         create<MavenPublication>("mavenKotlin") {
             from(components["kotlin"])
             artifact(sourcesJar)
-            artifactId = "idkollen-client-kotlin"
+            artifactId = "identisure-client-kotlin"
             pom {
-                name.set("IDkollen Client Kotlin")
-                description.set("Kotlin coroutine extensions for the IDkollen REST API client")
-                url.set("https://idkollen.se")
+                name.set("Identisure Client Kotlin")
+                description.set("Kotlin coroutine extensions for the Identisure REST API client")
+                url.set("https://identisure.com")
                 licenses {
                     license {
                         name.set("MIT License")
@@ -48,8 +48,8 @@ publishing {
                     }
                 }
                 scm {
-                    connection.set("scm:git:git://github.com/idkollen/idkollen-client-jvm.git")
-                    url.set("https://github.com/idkollen/idkollen-client-jvm")
+                    connection.set("scm:git:git://github.com/identisure/identisure-client-jvm.git")
+                    url.set("https://github.com/identisure/identisure-client-jvm")
                 }
             }
         }

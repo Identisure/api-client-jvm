@@ -1,22 +1,22 @@
 <img align="left" height="100" style="margin-right: 10px;" src="../img/icon.png">
 
-# IDkollen JVM Client
+# Identisure JVM Client
 
 [![Crate][crate-image]][crate-url]
 [![Downloads][downloads-image]][downloads-url]
 [![Documentation][docs-image]][docs-url]
 [![MIT license][license-image]][license-url]
 
-[crate-image]: https://img.shields.io/crates/v/idkollen-client?style=flat-square
-[crate-url]: https://crates.io/crates/idkollen-client
-[downloads-image]: https://img.shields.io/crates/d/idkollen-client?style=flat-square
-[downloads-url]: https://crates.io/crates/idkollen-client
-[docs-image]: https://img.shields.io/docsrs/idkollen-client?style=flat-square
-[docs-url]: https://docs.rs/idkollen-client
+[crate-image]: https://img.shields.io/crates/v/identisure-client?style=flat-square
+[crate-url]: https://crates.io/crates/identisure-client
+[downloads-image]: https://img.shields.io/crates/d/identisure-client?style=flat-square
+[downloads-url]: https://crates.io/crates/identisure-client
+[docs-image]: https://img.shields.io/docsrs/identisure-client?style=flat-square
+[docs-url]: https://docs.rs/identisure-client
 [license-image]: https://img.shields.io/badge/license-MIT-blue?style=flat-square
 [license-url]: https://opensource.org/licenses/MIT
 
-API client for the [IDkollen](https://idkollen.se) REST API on the JVM (Java, Kotlin, Scala).
+API client for the [Identisure](https://identisure.com) REST API on the JVM (Java, Kotlin, Scala).
 
 ## Installation
 
@@ -24,18 +24,18 @@ API client for the [IDkollen](https://idkollen.se) REST API on the JVM (Java, Ko
 
 ```kotlin
 // Java only
-implementation("se.idkollen:idkollen-client-core:0.1.0")
+implementation("com.identisure:identisure-client-core:0.1.0")
 
 // Kotlin coroutines extensions
-implementation("se.idkollen:idkollen-client-kotlin:0.1.0")
+implementation("com.identisure:identisure-client-kotlin:0.1.0")
 ```
 
 ### Maven
 
 ```xml
 <dependency>
-    <groupId>se.idkollen</groupId>
-    <artifactId>idkollen-client-core</artifactId>
+    <groupId>com.identisure</groupId>
+    <artifactId>identisure-client-core</artifactId>
     <version>0.1.0</version>
 </dependency>
 ```
@@ -43,13 +43,13 @@ implementation("se.idkollen:idkollen-client-kotlin:0.1.0")
 ## Usage
 
 ```java
-import se.idkollen.client.Environment;
-import se.idkollen.client.IdkollenClientBuilder;
-import se.idkollen.client.models.BankIdSeAuthRequest;
-import se.idkollen.client.models.BankIdSeStatus;
+import com.identisure.client.Environment;
+import com.identisure.client.IdentisureClientBuilder;
+import com.identisure.client.models.BankIdSeAuthRequest;
+import com.identisure.client.models.BankIdSeStatus;
 
 void main() {
-    var client = new IdkollenClientBuilder("client_id", "client_secret")
+    var client = new IdentisureClientBuilder("client_id", "client_secret")
         .environment(Environment.STAGING)
         .build();
     var bankIdSe = client.bankIdSe();
@@ -64,12 +64,12 @@ void main() {
 ### Kotlin
 
 ```kotlin
-import se.idkollen.client.*
-import se.idkollen.client.endpoints.*
-import se.idkollen.client.models.*
+import com.identisure.client.*
+import com.identisure.client.endpoints.*
+import com.identisure.client.models.*
 
 suspend fun main() {
-    val client = idkollenClient("client_id", "client_secret") {
+    val client = identisureClient("client_id", "client_secret") {
         environment(Environment.STAGING)
     }
 
