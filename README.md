@@ -135,6 +135,17 @@ $ gradle spotlessCheck
 $ gradle spotlessApply
 ```
 
+#### Release
+
+Set the version in `gradle.properties` and `core/src/main/java/com/identisure/client/IdentisureClientBuilder.java` and commit. Then push a tag:
+
+```sh
+$ git tag v0.1.0
+$ git push origin v0.1.0
+```
+
+The release workflow checks that the tag matches the version, runs CI, publishes to Maven Central and creates a GitHub release.
+
 ## Other languages
 
 [C#](https://github.com/identisure/api-client-csharp), [Dart](https://github.com/identisure/api-client-dart), [Go](https://github.com/identisure/api-client-go), [TypeScript/JavaScript](https://github.com/identisure/api-client-js), [PHP](https://github.com/identisure/api-client-php), [Python](https://github.com/identisure/api-client-py), [Ruby](https://github.com/identisure/api-client-ruby), [Rust](https://github.com/identisure/api-client-rust), [Swift](https://github.com/identisure/api-client-swift)

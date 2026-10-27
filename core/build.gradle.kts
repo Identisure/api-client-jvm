@@ -1,17 +1,11 @@
 plugins {
     `java-library`
-    `maven-publish`
-    signing
-    id("com.diffplug.spotless") version "8.10.4"
+    id("com.diffplug.spotless")
+    id("com.vanniktech.maven.publish")
 }
-
-group = "com.identisure"
-version = "0.1.0"
 
 java {
     toolchain { languageVersion = JavaLanguageVersion.of(17) }
-    withJavadocJar()
-    withSourcesJar()
 }
 
 repositories {
@@ -49,60 +43,10 @@ tasks.test {
     systemProperty("identisure.fixtures", rootDir.resolve("fixtures").absolutePath)
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
-            artifactId = "identisure-client"
-            pom {
-                name.set("Identisure Client Core")
-                description.set("Java client for the Identisure REST API")
-                url.set("https://identisure.com")
-                licenses {
-                    license {
-                        name.set("MIT License")
-                        url.set("https://opensource.org/licenses/MIT")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:git://github.com/identisure/api-client-jvm.git")
-                    url.set("https://github.com/identisure/api-client-jvm")
-                }
-            }
-        }
-    }
-    repositories {
-        maven {
-            name = "sonatype"
-            url = uri(
-                if (version.toString().endsWith("-SNAPSHOT")) {
-                    "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-                } else {
-                    "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-                }
-            )
-            credentials {
-                username = providers.gradleProperty("ossrhUsername").orNull
-                password = providers.gradleProperty("ossrhPassword").orNull
-            }
-        }
-    }
-}
-
 tasks.javadoc {
     val opts = options as StandardJavadocDocletOptions
     opts.addBooleanOption("Xdoclint:none", true)
     // Only document exported packages — hide com.identisure.client.internal.
     opts.addStringOption("-show-packages", "exported")
     opts.addStringOption("-show-module-contents", "api")
-}
-
-signing {
-    val key = providers.gradleProperty("signingKey").orNull
-    val pwd = providers.gradleProperty("signingPassword").orNull
-
-    if (key != null && pwd != null) {
-        useInMemoryPgpKeys(key, pwd)
-        sign(publishing.publications["mavenJava"])
-    }
 }
