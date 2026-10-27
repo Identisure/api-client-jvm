@@ -3,10 +3,8 @@ package com.identisure.client.internal;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import okhttp3.*;
 import com.identisure.client.IdentisureError;
 import com.identisure.client.PollOptions;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -14,6 +12,7 @@ import java.util.Base64;
 import java.util.concurrent.*;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import okhttp3.*;
 
 /**
  * Internal HTTP helper used by endpoint classes. Not part of the public API.
@@ -32,8 +31,8 @@ public final class Transport {
     });
 
     private final ObjectMapper mapper = new ObjectMapper()
-        .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     private final String baseUrl;
     private final String credentials;
@@ -41,11 +40,16 @@ public final class Transport {
     private final Duration timeout;
     private final OkHttpClient http;
 
-    public Transport(String baseUrl, String clientId, String clientSecret, String userAgent, Duration timeout, OkHttpClient http) {
+    public Transport(
+            String baseUrl,
+            String clientId,
+            String clientSecret,
+            String userAgent,
+            Duration timeout,
+            OkHttpClient http) {
         this.baseUrl = baseUrl;
-        this.credentials = "Basic " + Base64.getEncoder()
-            .encodeToString((clientId + ':' + clientSecret)
-            .getBytes(StandardCharsets.UTF_8));
+        this.credentials = "Basic "
+                + Base64.getEncoder().encodeToString((clientId + ':' + clientSecret).getBytes(StandardCharsets.UTF_8));
         this.userAgent = userAgent;
         this.timeout = timeout;
         this.http = http;
@@ -86,6 +90,7 @@ public final class Transport {
             public void onFailure(Call call, IOException e) {
                 future.completeExceptionally(new IdentisureError("http", 0, e.getMessage()));
             }
+
             @Override
             public void onResponse(Call call, Response response) {
                 try (response) {
@@ -105,7 +110,8 @@ public final class Transport {
         return future;
     }
 
-    public <T> CompletableFuture<T> poll(Supplier<CompletableFuture<T>> statusFn, Predicate<T> isPending, PollOptions opts) {
+    public <T> CompletableFuture<T> poll(
+            Supplier<CompletableFuture<T>> statusFn, Predicate<T> isPending, PollOptions opts) {
         var deadline = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(opts.timeoutMs());
         var result = new CompletableFuture<T>();
         doPoll(statusFn, isPending, deadline, opts.intervalMs(), result);
@@ -113,32 +119,30 @@ public final class Transport {
     }
 
     private <T> void doPoll(
-        Supplier<CompletableFuture<T>> statusFn,
-        Predicate<T> isPending,
-        long deadline,
-        long intervalMs,
-        CompletableFuture<T> result
-    ) {
+            Supplier<CompletableFuture<T>> statusFn,
+            Predicate<T> isPending,
+            long deadline,
+            long intervalMs,
+            CompletableFuture<T> result) {
         if (result.isDone()) {
             return;
         }
 
         statusFn.get().whenComplete((status, err) -> {
             if (err != null) {
-                result.completeExceptionally(err); return;
+                result.completeExceptionally(err);
+                return;
             }
             if (!isPending.test(status)) {
-                result.complete(status); return;
+                result.complete(status);
+                return;
             }
             if (System.nanoTime() - deadline >= 0) {
                 result.completeExceptionally(new IdentisureError("poll_timeout", 0, "Poll timed out"));
                 return;
             }
             SCHEDULER.schedule(
-                () -> doPoll(statusFn, isPending, deadline, intervalMs, result),
-                intervalMs,
-                TimeUnit.MILLISECONDS
-            );
+                    () -> doPoll(statusFn, isPending, deadline, intervalMs, result), intervalMs, TimeUnit.MILLISECONDS);
         });
     }
 
@@ -150,9 +154,9 @@ public final class Transport {
 
     private Request.Builder baseRequest(String path) {
         return new Request.Builder()
-            .url(baseUrl + path)
-            .header("Authorization", credentials)
-            .header("User-Agent", userAgent);
+                .url(baseUrl + path)
+                .header("Authorization", credentials)
+                .header("User-Agent", userAgent);
     }
 
     private <T> CompletableFuture<T> execute(Request req, Class<T> type) {
@@ -163,6 +167,7 @@ public final class Transport {
             public void onFailure(Call call, IOException e) {
                 future.completeExceptionally(new IdentisureError("http", 0, e.getMessage()));
             }
+
             @Override
             public void onResponse(Call call, Response response) {
                 try (response) {
@@ -193,6 +198,7 @@ public final class Transport {
             public void onFailure(Call call, IOException e) {
                 future.completeExceptionally(new IdentisureError("http", 0, e.getMessage()));
             }
+
             @Override
             public void onResponse(Call call, Response response) {
                 try (response) {

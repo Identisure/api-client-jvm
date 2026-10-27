@@ -14,6 +14,8 @@ public class FrejaSignRequest {
     public @Nullable Boolean requestAddress;
     public @Nullable String refId;
 
+    public FrejaSignRequest() {}
+
     public FrejaSignRequest setText(String v) {
         text = v;
         return this;

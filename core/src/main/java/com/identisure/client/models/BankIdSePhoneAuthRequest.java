@@ -15,6 +15,8 @@ public class BankIdSePhoneAuthRequest {
     public @Nullable Boolean requestAddress;
     public @Nullable String refId;
 
+    public BankIdSePhoneAuthRequest() {}
+
     public BankIdSePhoneAuthRequest setSsn(String v) {
         ssn = v;
         return this;

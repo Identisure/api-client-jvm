@@ -4,24 +4,33 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.util.List;
 import java.util.Objects;
 import org.jspecify.annotations.Nullable;
-import java.util.List;
 
 /** BankID NO session status. Discriminated by the {@code status} JSON field. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "status", visible = true, defaultImpl = BankIdNoStatus.Unknown.class)
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        property = "status",
+        visible = true,
+        defaultImpl = BankIdNoStatus.Unknown.class)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = BankIdNoStatus.Pending.class, name = "PENDING"),
     @JsonSubTypes.Type(value = BankIdNoStatus.Completed.class, name = "COMPLETED"),
     @JsonSubTypes.Type(value = BankIdNoStatus.Failed.class, name = "FAILED"),
 })
-public abstract sealed class BankIdNoStatus permits BankIdNoStatus.Pending, BankIdNoStatus.Completed, BankIdNoStatus.Failed, BankIdNoStatus.Unknown {
+public abstract sealed class BankIdNoStatus
+        permits BankIdNoStatus.Pending, BankIdNoStatus.Completed, BankIdNoStatus.Failed, BankIdNoStatus.Unknown {
+    private BankIdNoStatus() {}
+
     /** Returned while the user has not yet acted. */
     public static final class Pending extends BankIdNoStatus {
         public String id = "";
         public @Nullable String refId;
         public @Nullable String url;
         public @Nullable String bindingMessage;
+
+        public Pending() {}
     }
 
     /** Returned when the BankID NO session has completed successfully. */
@@ -42,6 +51,8 @@ public abstract sealed class BankIdNoStatus permits BankIdNoStatus.Pending, Bank
         public @Nullable List<SignedDocument> signedDocuments;
         public @Nullable String authenticatedAt;
         public @Nullable String signedAt;
+
+        public Completed() {}
     }
 
     /** Returned when the BankID NO session has failed. */
@@ -49,6 +60,8 @@ public abstract sealed class BankIdNoStatus permits BankIdNoStatus.Pending, Bank
         public String id = "";
         public @Nullable String refId;
         public ApiErrorCode error = ApiErrorCode.INTERNAL_ERROR;
+
+        public Failed() {}
     }
 
     /** Signing result returned in a completed BankID NO sign session. */
@@ -56,12 +69,16 @@ public abstract sealed class BankIdNoStatus permits BankIdNoStatus.Pending, Bank
         public String endUser = "";
         public String merchant = "";
         public String hash = "";
+
+        public SignResult() {}
     }
 
     /** A signed document reference returned in a completed BankID NO sign session. */
     public static final class SignedDocument {
         public String id = "";
         public String hash = "";
+
+        public SignedDocument() {}
     }
 
     /** A status this client version does not recognize. */

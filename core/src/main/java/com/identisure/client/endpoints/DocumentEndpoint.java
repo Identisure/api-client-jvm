@@ -1,19 +1,17 @@
 package com.identisure.client.endpoints;
 
-import com.identisure.client.PollOptions;
 import com.identisure.client.internal.Transport;
-
+import com.identisure.client.models.DocumentUploadResponse;
+import java.util.concurrent.CompletableFuture;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import com.identisure.client.models.DocumentUploadResponse;
-
-import java.util.concurrent.CompletableFuture;
 
 /** Endpoint for document upload and download operations. */
 public class DocumentEndpoint {
     private final Transport transport;
 
+    @SuppressWarnings("exports") // Constructed by IdentisureClient; Transport is internal
     public DocumentEndpoint(Transport transport) {
         this.transport = transport;
     }
@@ -29,9 +27,9 @@ public class DocumentEndpoint {
     public CompletableFuture<DocumentUploadResponse> upload(byte[] bytes, String filename, String mimeType) {
         var fileBody = RequestBody.create(bytes, MediaType.get(mimeType));
         var form = new MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart("file", filename, fileBody)
-            .build();
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file", filename, fileBody)
+                .build();
 
         return transport.postMultipart("/v3/document", form, DocumentUploadResponse.class);
     }

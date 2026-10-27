@@ -13,6 +13,8 @@ public class FrejaAuthRequest {
     public @Nullable Boolean requestAddress;
     public @Nullable String refId;
 
+    public FrejaAuthRequest() {}
+
     public FrejaAuthRequest setSsn(@Nullable String v) {
         ssn = v;
         return this;

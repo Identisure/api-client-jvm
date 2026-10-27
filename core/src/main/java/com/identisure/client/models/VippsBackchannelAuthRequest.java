@@ -13,6 +13,8 @@ public class VippsBackchannelAuthRequest {
     public @Nullable String callbackUrl;
     public @Nullable String refId;
 
+    public VippsBackchannelAuthRequest() {}
+
     public VippsBackchannelAuthRequest setPhone(String v) {
         phone = v;
         return this;
@@ -27,6 +29,7 @@ public class VippsBackchannelAuthRequest {
         requestEmail = v;
         return this;
     }
+
     public VippsBackchannelAuthRequest setRequestAddress(@Nullable Boolean v) {
         requestAddress = v;
         return this;

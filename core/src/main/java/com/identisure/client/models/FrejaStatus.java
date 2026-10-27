@@ -14,13 +14,18 @@ import org.jspecify.annotations.Nullable;
     @JsonSubTypes.Type(value = FrejaStatus.Completed.class, name = "COMPLETED"),
     @JsonSubTypes.Type(value = FrejaStatus.Failed.class, name = "FAILED"),
 })
-public abstract sealed class FrejaStatus permits FrejaStatus.Pending, FrejaStatus.Completed, FrejaStatus.Failed, FrejaStatus.Unknown {
+public abstract sealed class FrejaStatus
+        permits FrejaStatus.Pending, FrejaStatus.Completed, FrejaStatus.Failed, FrejaStatus.Unknown {
+    private FrejaStatus() {}
+
     /** Returned while the user has not yet acted in the Freja app. */
     public static final class Pending extends FrejaStatus {
         public String id = "";
         public @Nullable String refId;
         public String autoStartToken = "";
         public String qrData = "";
+
+        public Pending() {}
     }
 
     /** Returned when the Freja eID session has completed successfully. */
@@ -36,6 +41,8 @@ public abstract sealed class FrejaStatus permits FrejaStatus.Pending, FrejaStatu
         public @Nullable String companySignatoryText;
         public @Nullable String authenticatedAt;
         public @Nullable String signedAt;
+
+        public Completed() {}
     }
 
     /** Returned when the Freja eID session has failed. */
@@ -43,6 +50,8 @@ public abstract sealed class FrejaStatus permits FrejaStatus.Pending, FrejaStatu
         public String id = "";
         public @Nullable String refId;
         public ApiErrorCode error = ApiErrorCode.INTERNAL_ERROR;
+
+        public Failed() {}
     }
 
     /** A status this client version does not recognize. */

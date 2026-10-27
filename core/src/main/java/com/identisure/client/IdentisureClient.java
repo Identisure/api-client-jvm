@@ -1,10 +1,9 @@
 package com.identisure.client;
 
-import okhttp3.OkHttpClient;
-
-import java.time.Duration;
 import com.identisure.client.endpoints.*;
 import com.identisure.client.internal.Transport;
+import java.time.Duration;
+import okhttp3.OkHttpClient;
 
 /**
  * Authenticated HTTP client for the Identisure REST API.
@@ -15,7 +14,13 @@ import com.identisure.client.internal.Transport;
 public final class IdentisureClient {
     private final Transport transport;
 
-    IdentisureClient(String baseUrl, String clientId, String clientSecret, String userAgent, Duration timeout, OkHttpClient http) {
+    IdentisureClient(
+            String baseUrl,
+            String clientId,
+            String clientSecret,
+            String userAgent,
+            Duration timeout,
+            OkHttpClient http) {
         this.transport = new Transport(baseUrl, clientId, clientSecret, userAgent, timeout, http);
     }
 

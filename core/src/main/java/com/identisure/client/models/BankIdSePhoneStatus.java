@@ -8,18 +8,30 @@ import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 
 /** BankID SE session status for phone auth and sign flows. Discriminated by the {@code status} JSON field. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "status", visible = true, defaultImpl = BankIdSePhoneStatus.Unknown.class)
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        property = "status",
+        visible = true,
+        defaultImpl = BankIdSePhoneStatus.Unknown.class)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = BankIdSePhoneStatus.Pending.class, name = "PENDING"),
     @JsonSubTypes.Type(value = BankIdSePhoneStatus.Completed.class, name = "COMPLETED"),
     @JsonSubTypes.Type(value = BankIdSePhoneStatus.Failed.class, name = "FAILED"),
 })
-public abstract sealed class BankIdSePhoneStatus permits BankIdSePhoneStatus.Pending, BankIdSePhoneStatus.Completed, BankIdSePhoneStatus.Failed, BankIdSePhoneStatus.Unknown {
+public abstract sealed class BankIdSePhoneStatus
+        permits BankIdSePhoneStatus.Pending,
+                BankIdSePhoneStatus.Completed,
+                BankIdSePhoneStatus.Failed,
+                BankIdSePhoneStatus.Unknown {
+    private BankIdSePhoneStatus() {}
+
     /** Returned while the user has not yet acted in a phone auth or sign flow. */
     public static final class Pending extends BankIdSePhoneStatus {
         public String id = "";
         public @Nullable String refId;
         public @Nullable String hintCode;
+
+        public Pending() {}
     }
 
     /** Returned when the BankID SE phone session has completed successfully. */
@@ -33,6 +45,8 @@ public abstract sealed class BankIdSePhoneStatus permits BankIdSePhoneStatus.Pen
         public String certStartDate = "";
         public @Nullable String address;
         public @Nullable String companySignatoryText;
+
+        public Completed() {}
     }
 
     /** Returned when the BankID SE phone session has failed. */
@@ -40,6 +54,8 @@ public abstract sealed class BankIdSePhoneStatus permits BankIdSePhoneStatus.Pen
         public String id = "";
         public @Nullable String refId;
         public ApiErrorCode error = ApiErrorCode.INTERNAL_ERROR;
+
+        public Failed() {}
     }
 
     /** A status this client version does not recognize. */

@@ -1,8 +1,7 @@
 package com.identisure.client;
 
-import okhttp3.OkHttpClient;
-
 import java.time.Duration;
+import okhttp3.OkHttpClient;
 
 /**
  * Fluent builder for {@link IdentisureClient}.

@@ -14,12 +14,17 @@ import org.jspecify.annotations.Nullable;
     @JsonSubTypes.Type(value = FtnStatus.Completed.class, name = "COMPLETED"),
     @JsonSubTypes.Type(value = FtnStatus.Failed.class, name = "FAILED"),
 })
-public abstract sealed class FtnStatus permits FtnStatus.Pending, FtnStatus.Completed, FtnStatus.Failed, FtnStatus.Unknown {
+public abstract sealed class FtnStatus
+        permits FtnStatus.Pending, FtnStatus.Completed, FtnStatus.Failed, FtnStatus.Unknown {
+    private FtnStatus() {}
+
     /** Returned while the user has not yet acted. */
     public static final class Pending extends FtnStatus {
         public String id = "";
         public @Nullable String refId;
         public String url = "";
+
+        public Pending() {}
     }
 
     /** Returned when the FTN session has completed successfully. */
@@ -38,6 +43,8 @@ public abstract sealed class FtnStatus permits FtnStatus.Pending, FtnStatus.Comp
         public @Nullable String bankId;
         public @Nullable String bankName;
         public @Nullable String authenticatedAt;
+
+        public Completed() {}
     }
 
     /** Returned when the FTN session has failed. */
@@ -45,6 +52,8 @@ public abstract sealed class FtnStatus permits FtnStatus.Pending, FtnStatus.Comp
         public String id = "";
         public @Nullable String refId;
         public ApiErrorCode error = ApiErrorCode.INTERNAL_ERROR;
+
+        public Failed() {}
     }
 
     /** A status this client version does not recognize. */

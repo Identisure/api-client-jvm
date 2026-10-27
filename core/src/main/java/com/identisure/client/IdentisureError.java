@@ -2,6 +2,8 @@ package com.identisure.client;
 
 /** Exception thrown by all client operations when a request cannot be completed. */
 public class IdentisureError extends RuntimeException {
+    private static final long serialVersionUID = 1L;
+
     /** Short machine-readable error code (e.g. {@code "api"}, {@code "http"}, {@code "json"}, {@code "poll_timeout"}). */
     public final String code;
     /** HTTP status code returned by the server, or {@code 0} for non-HTTP errors. */

@@ -14,6 +14,8 @@ public class FrejaBackchannelAuthRequest {
     public @Nullable Boolean requestAddress;
     public @Nullable String refId;
 
+    public FrejaBackchannelAuthRequest() {}
+
     public FrejaBackchannelAuthRequest setSsn(String v) {
         ssn = v;
         return this;

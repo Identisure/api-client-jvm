@@ -6,6 +6,8 @@ package com.identisure.client.models;
 public class BankIdSeVerifyRequest {
     public String qrCode = "";
 
+    public BankIdSeVerifyRequest() {}
+
     public BankIdSeVerifyRequest setQrCode(String v) {
         qrCode = v;
         return this;

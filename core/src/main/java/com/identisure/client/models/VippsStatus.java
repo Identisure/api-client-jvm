@@ -14,12 +14,17 @@ import org.jspecify.annotations.Nullable;
     @JsonSubTypes.Type(value = VippsStatus.Completed.class, name = "COMPLETED"),
     @JsonSubTypes.Type(value = VippsStatus.Failed.class, name = "FAILED"),
 })
-public abstract sealed class VippsStatus permits VippsStatus.Pending, VippsStatus.Completed, VippsStatus.Failed, VippsStatus.Unknown {
+public abstract sealed class VippsStatus
+        permits VippsStatus.Pending, VippsStatus.Completed, VippsStatus.Failed, VippsStatus.Unknown {
+    private VippsStatus() {}
+
     /** Returned while the user has not yet acted. */
     public static final class Pending extends VippsStatus {
         public String id = "";
         public @Nullable String refId;
         public @Nullable String url;
+
+        public Pending() {}
     }
 
     /** Returned when the Vipps session has completed successfully. */
@@ -37,6 +42,8 @@ public abstract sealed class VippsStatus permits VippsStatus.Pending, VippsStatu
         public @Nullable String pid;
         public @Nullable String bankId;
         public @Nullable String authenticatedAt;
+
+        public Completed() {}
     }
 
     /** Returned when the Vipps session has failed. */
@@ -44,6 +51,8 @@ public abstract sealed class VippsStatus permits VippsStatus.Pending, VippsStatu
         public String id = "";
         public @Nullable String refId;
         public ApiErrorCode error = ApiErrorCode.INTERNAL_ERROR;
+
+        public Failed() {}
     }
 
     /** A status this client version does not recognize. */

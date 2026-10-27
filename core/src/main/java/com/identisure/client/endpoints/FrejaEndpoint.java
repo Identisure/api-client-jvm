@@ -2,15 +2,14 @@ package com.identisure.client.endpoints;
 
 import com.identisure.client.PollOptions;
 import com.identisure.client.internal.Transport;
-
 import com.identisure.client.models.*;
-
 import java.util.concurrent.CompletableFuture;
 
 /** Endpoint for Freja eID operations. */
 public class FrejaEndpoint {
     private final Transport transport;
 
+    @SuppressWarnings("exports") // Constructed by IdentisureClient; Transport is internal
     public FrejaEndpoint(Transport transport) {
         this.transport = transport;
     }

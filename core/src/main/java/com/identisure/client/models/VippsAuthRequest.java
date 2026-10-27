@@ -14,6 +14,8 @@ public class VippsAuthRequest {
     public @Nullable String refId;
     public @Nullable String appCallbackUri;
 
+    public VippsAuthRequest() {}
+
     public VippsAuthRequest setRedirectUrl(@Nullable String v) {
         redirectUrl = v;
         return this;

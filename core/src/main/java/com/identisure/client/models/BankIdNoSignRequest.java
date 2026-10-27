@@ -1,8 +1,7 @@
 package com.identisure.client.models;
 
-import org.jspecify.annotations.Nullable;
-
 import java.util.List;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Request body for starting a BankID NO signing session.
@@ -17,7 +16,10 @@ public class BankIdNoSignRequest {
      * Document IDs to sign (from {@code /v3/document}). Mutually exclusive with {@code text}.
      */
     public @Nullable List<String> documents;
+
     public @Nullable String refId;
+
+    public BankIdNoSignRequest() {}
 
     public BankIdNoSignRequest setRedirectUrl(@Nullable String v) {
         redirectUrl = v;

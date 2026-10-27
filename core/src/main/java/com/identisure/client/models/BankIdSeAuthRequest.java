@@ -39,6 +39,8 @@ public class BankIdSeAuthRequest {
      */
     public @Nullable String refId;
 
+    public BankIdSeAuthRequest() {}
+
     public BankIdSeAuthRequest setSsn(@Nullable String v) {
         ssn = v;
         return this;

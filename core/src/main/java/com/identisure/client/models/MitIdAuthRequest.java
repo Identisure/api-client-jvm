@@ -11,10 +11,13 @@ public class MitIdAuthRequest {
      * Text shown to the user during authentication. Must not contain {@code %} or {@code <} (max 130 chars).
      */
     public @Nullable String referenceText;
+
     public @Nullable Boolean requestPhone;
     public @Nullable Boolean requestEmail;
     public @Nullable Boolean requestAddress;
     public @Nullable String refId;
+
+    public MitIdAuthRequest() {}
 
     public MitIdAuthRequest setRedirectUrl(@Nullable String v) {
         redirectUrl = v;

@@ -11,11 +11,14 @@ public class BankIdNoAuthRequest {
      * Request the user's Norwegian personal number (fødselsnummer).
      */
     public @Nullable Boolean requestSsn;
+
     public @Nullable Boolean requestPhone;
     public @Nullable Boolean requestEmail;
     public @Nullable Boolean requestAddress;
     public @Nullable String refId;
     public @Nullable String appCallbackUri;
+
+    public BankIdNoAuthRequest() {}
 
     public BankIdNoAuthRequest setRedirectUrl(@Nullable String v) {
         redirectUrl = v;

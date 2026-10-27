@@ -14,13 +14,18 @@ import org.jspecify.annotations.Nullable;
     @JsonSubTypes.Type(value = MitIdStatus.Completed.class, name = "COMPLETED"),
     @JsonSubTypes.Type(value = MitIdStatus.Failed.class, name = "FAILED"),
 })
-public abstract sealed class MitIdStatus permits MitIdStatus.Pending, MitIdStatus.Completed, MitIdStatus.Failed, MitIdStatus.Unknown {
+public abstract sealed class MitIdStatus
+        permits MitIdStatus.Pending, MitIdStatus.Completed, MitIdStatus.Failed, MitIdStatus.Unknown {
+    private MitIdStatus() {}
+
     /** Returned while the user has not yet acted. */
     public static final class Pending extends MitIdStatus {
         public String id = "";
         public @Nullable String refId;
         public @Nullable String url;
         public @Nullable String bindingMessage;
+
+        public Pending() {}
     }
 
     /** Returned when the MitID session has completed successfully. */
@@ -40,6 +45,8 @@ public abstract sealed class MitIdStatus permits MitIdStatus.Pending, MitIdStatu
         public @Nullable SignResult signResult;
         public @Nullable String authenticatedAt;
         public @Nullable String signedAt;
+
+        public Completed() {}
     }
 
     /** Returned when the MitID session has failed. */
@@ -47,11 +54,15 @@ public abstract sealed class MitIdStatus permits MitIdStatus.Pending, MitIdStatu
         public String id = "";
         public @Nullable String refId;
         public ApiErrorCode error = ApiErrorCode.INTERNAL_ERROR;
+
+        public Failed() {}
     }
 
     /** Signing result returned in a completed MitID sign session. */
     public static final class SignResult {
         public String checksum = "";
+
+        public SignResult() {}
     }
 
     /** A status this client version does not recognize. */

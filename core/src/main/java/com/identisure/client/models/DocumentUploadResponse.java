@@ -6,4 +6,6 @@ public class DocumentUploadResponse {
     public String id;
     /** SHA hash of the uploaded document for integrity verification. */
     public String hash;
+
+    public DocumentUploadResponse() {}
 }

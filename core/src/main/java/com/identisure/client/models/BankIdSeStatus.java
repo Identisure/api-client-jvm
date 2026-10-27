@@ -8,13 +8,20 @@ import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 
 /** BankID SE session status. Discriminated by the {@code status} JSON field. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "status", visible = true, defaultImpl = BankIdSeStatus.Unknown.class)
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        property = "status",
+        visible = true,
+        defaultImpl = BankIdSeStatus.Unknown.class)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = BankIdSeStatus.Pending.class, name = "PENDING"),
     @JsonSubTypes.Type(value = BankIdSeStatus.Completed.class, name = "COMPLETED"),
     @JsonSubTypes.Type(value = BankIdSeStatus.Failed.class, name = "FAILED"),
 })
-public abstract sealed class BankIdSeStatus permits BankIdSeStatus.Pending, BankIdSeStatus.Completed, BankIdSeStatus.Failed, BankIdSeStatus.Unknown {
+public abstract sealed class BankIdSeStatus
+        permits BankIdSeStatus.Pending, BankIdSeStatus.Completed, BankIdSeStatus.Failed, BankIdSeStatus.Unknown {
+    private BankIdSeStatus() {}
+
     /** Returned while the user has not yet acted in the BankID app. */
     public static final class Pending extends BankIdSeStatus {
         public String id = "";
@@ -23,6 +30,8 @@ public abstract sealed class BankIdSeStatus permits BankIdSeStatus.Pending, Bank
         public String qrStartToken = "";
         public String qrStartSecret = "";
         public @Nullable String hintCode;
+
+        public Pending() {}
     }
 
     /** Returned when the BankID SE session has completed successfully. */
@@ -42,18 +51,24 @@ public abstract sealed class BankIdSeStatus permits BankIdSeStatus.Pending, Bank
         public @Nullable String companySignatoryText;
         public @Nullable String authenticatedAt;
         public @Nullable String signedAt;
+
+        public Completed() {}
     }
 
     /** The user's device, as seen by BankID. */
     public static final class Device {
         public @Nullable String ipAddress;
         public @Nullable String uhi;
+
+        public Device() {}
     }
 
     /** Additional verifications performed before the order completed. */
     public static final class StepUp {
         public @Nullable Boolean mrtd;
         public @Nullable Boolean face;
+
+        public StepUp() {}
     }
 
     /** Returned when the BankID SE session has failed. */
@@ -61,6 +76,8 @@ public abstract sealed class BankIdSeStatus permits BankIdSeStatus.Pending, Bank
         public String id = "";
         public @Nullable String refId;
         public ApiErrorCode error = ApiErrorCode.INTERNAL_ERROR;
+
+        public Failed() {}
     }
 
     /** A status this client version does not recognize. */

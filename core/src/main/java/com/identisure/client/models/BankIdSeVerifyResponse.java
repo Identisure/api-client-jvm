@@ -10,4 +10,6 @@ public class BankIdSeVerifyResponse {
     public String surname = "";
     public @Nullable Integer age;
     public @Nullable String verifiedAt;
+
+    public BankIdSeVerifyResponse() {}
 }

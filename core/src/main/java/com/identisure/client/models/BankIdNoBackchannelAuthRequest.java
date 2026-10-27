@@ -10,6 +10,8 @@ public class BankIdNoBackchannelAuthRequest {
     public @Nullable String callbackUrl;
     public @Nullable String refId;
 
+    public BankIdNoBackchannelAuthRequest() {}
+
     public BankIdNoBackchannelAuthRequest setSsn(String v) {
         ssn = v;
         return this;

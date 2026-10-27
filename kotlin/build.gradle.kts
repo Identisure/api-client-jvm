@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "2.1.21"
+    id("com.diffplug.spotless") version "8.10.4"
     `maven-publish`
     signing
 }
@@ -9,6 +10,15 @@ version = "0.1.0"
 
 kotlin {
     jvmToolchain(17)
+    compilerOptions {
+        allWarningsAsErrors = true
+    }
+}
+
+spotless {
+    kotlin {
+        ktfmt("0.64").kotlinlangStyle()
+    }
 }
 
 repositories {

@@ -2,15 +2,14 @@ package com.identisure.client.endpoints;
 
 import com.identisure.client.PollOptions;
 import com.identisure.client.internal.Transport;
-
 import com.identisure.client.models.*;
-
 import java.util.concurrent.CompletableFuture;
 
 /** Endpoint for Vipps MobilePay operations. */
 public class VippsEndpoint {
     private final Transport transport;
 
+    @SuppressWarnings("exports") // Constructed by IdentisureClient; Transport is internal
     public VippsEndpoint(Transport transport) {
         this.transport = transport;
     }

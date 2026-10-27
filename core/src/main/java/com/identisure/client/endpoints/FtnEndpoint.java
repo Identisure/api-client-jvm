@@ -2,15 +2,14 @@ package com.identisure.client.endpoints;
 
 import com.identisure.client.PollOptions;
 import com.identisure.client.internal.Transport;
-
 import com.identisure.client.models.*;
-
 import java.util.concurrent.CompletableFuture;
 
 /** Endpoint for Finnish Trust Network (FTN) operations. */
 public class FtnEndpoint {
     private final Transport transport;
 
+    @SuppressWarnings("exports") // Constructed by IdentisureClient; Transport is internal
     public FtnEndpoint(Transport transport) {
         this.transport = transport;
     }

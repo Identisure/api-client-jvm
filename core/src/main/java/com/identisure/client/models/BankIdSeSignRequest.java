@@ -10,6 +10,7 @@ public class BankIdSeSignRequest {
      * Visible text the user must approve in the BankID app (max 50 000 chars).
      */
     public String text = "";
+
     public @Nullable String ssn;
     public @Nullable String ipAddress;
     public @Nullable String callbackUrl;
@@ -18,9 +19,12 @@ public class BankIdSeSignRequest {
      * Hash digest of an associated file.
      */
     public @Nullable String digest;
+
     public @Nullable String orgNumber;
     public @Nullable Boolean requestAddress;
     public @Nullable String refId;
+
+    public BankIdSeSignRequest() {}
 
     public BankIdSeSignRequest setText(String v) {
         text = v;

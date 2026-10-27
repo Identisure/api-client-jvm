@@ -12,6 +12,8 @@ public class FtnAuthRequest {
     public @Nullable Boolean requestAddress;
     public @Nullable String refId;
 
+    public FtnAuthRequest() {}
+
     public FtnAuthRequest setRedirectUrl(@Nullable String v) {
         redirectUrl = v;
         return this;

@@ -1,27 +1,14 @@
 package com.identisure.client;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Base64;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
-import java.util.concurrent.TimeUnit;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.stream.Stream;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import com.identisure.client.models.AgeVerificationRequest;
 import com.identisure.client.models.AgeVerificationStatus;
 import com.identisure.client.models.BankIdNoAuthRequest;
@@ -43,11 +30,24 @@ import com.identisure.client.models.MitIdSignRequest;
 import com.identisure.client.models.MitIdStatus;
 import com.identisure.client.models.VippsAuthRequest;
 import com.identisure.client.models.VippsStatus;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Base64;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.stream.Stream;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class EndToEndTest {
     private static final Path FIXTURES = Path.of(System.getProperty("identisure.fixtures", "../../fixtures"));
@@ -55,21 +55,21 @@ class EndToEndTest {
     private static final String AUTHORIZATION = "Basic " + Base64.getEncoder().encodeToString("cid:secret".getBytes());
 
     // Annotations off so models serialize as their plain public fields for comparison with fixtures.
-    private static final ObjectMapper PLAIN = JsonMapper.builder().disable(MapperFeature.USE_ANNOTATIONS).build();
+    private static final ObjectMapper PLAIN =
+            JsonMapper.builder().disable(MapperFeature.USE_ANNOTATIONS).build();
 
     private MockWebServer server;
     private IdentisureClient client;
 
     record Flow(
-        String fixtureDir,
-        String path,
-        Function<IdentisureClient, CompletableFuture<?>> start,
-        BiFunction<IdentisureClient, String, CompletableFuture<?>> waitFor,
-        Class<?> pending,
-        Class<?> completed,
-        Class<?> failed,
-        Class<?> unknown
-    ) {
+            String fixtureDir,
+            String path,
+            Function<IdentisureClient, CompletableFuture<?>> start,
+            BiFunction<IdentisureClient, String, CompletableFuture<?>> waitFor,
+            Class<?> pending,
+            Class<?> completed,
+            Class<?> failed,
+            Class<?> unknown) {
         @Override
         public String toString() {
             return path;
@@ -78,82 +78,112 @@ class EndToEndTest {
 
     static Stream<Flow> authFlows() {
         return Stream.of(
-            new Flow(
-                "bankid_se", "/v3/bankid-se/auth",
-                c -> c.bankIdSe().auth(new BankIdSeAuthRequest().setRefId("order-42")),
-                (c, id) -> c.bankIdSe().waitForAuth(id, FAST_POLL),
-                BankIdSeStatus.Pending.class, BankIdSeStatus.Completed.class,
-                BankIdSeStatus.Failed.class, BankIdSeStatus.Unknown.class
-            ),
-            new Flow(
-                "bankid_no", "/v3/bankid-no/auth",
-                c -> c.bankIdNo().auth(new BankIdNoAuthRequest().setRefId("order-42")),
-                (c, id) -> c.bankIdNo().waitForAuth(id, FAST_POLL),
-                BankIdNoStatus.Pending.class, BankIdNoStatus.Completed.class,
-                BankIdNoStatus.Failed.class, BankIdNoStatus.Unknown.class
-            ),
-            new Flow(
-                "freja", "/v3/freja/auth",
-                c -> c.freja().auth(new FrejaAuthRequest().setRefId("order-42")),
-                (c, id) -> c.freja().waitForAuth(id, FAST_POLL),
-                FrejaStatus.Pending.class, FrejaStatus.Completed.class,
-                FrejaStatus.Failed.class, FrejaStatus.Unknown.class
-            ),
-            new Flow(
-                "mitid", "/v3/mitid/auth",
-                c -> c.mitId().auth(new MitIdAuthRequest().setRefId("order-42")),
-                (c, id) -> c.mitId().waitForAuth(id, FAST_POLL),
-                MitIdStatus.Pending.class, MitIdStatus.Completed.class,
-                MitIdStatus.Failed.class, MitIdStatus.Unknown.class
-            ),
-            new Flow(
-                "ftn", "/v3/ftn/auth",
-                c -> c.ftn().auth(new FtnAuthRequest().setRefId("order-42")),
-                (c, id) -> c.ftn().waitForAuth(id, FAST_POLL),
-                FtnStatus.Pending.class, FtnStatus.Completed.class,
-                FtnStatus.Failed.class, FtnStatus.Unknown.class
-            ),
-            new Flow(
-                "vipps", "/v3/vipps/auth",
-                c -> c.vipps().auth(new VippsAuthRequest().setRefId("order-42")),
-                (c, id) -> c.vipps().waitForAuth(id, FAST_POLL),
-                VippsStatus.Pending.class, VippsStatus.Completed.class,
-                VippsStatus.Failed.class, VippsStatus.Unknown.class
-            )
-        );
+                new Flow(
+                        "bankid_se",
+                        "/v3/bankid-se/auth",
+                        c -> c.bankIdSe().auth(new BankIdSeAuthRequest().setRefId("order-42")),
+                        (c, id) -> c.bankIdSe().waitForAuth(id, FAST_POLL),
+                        BankIdSeStatus.Pending.class,
+                        BankIdSeStatus.Completed.class,
+                        BankIdSeStatus.Failed.class,
+                        BankIdSeStatus.Unknown.class),
+                new Flow(
+                        "bankid_no",
+                        "/v3/bankid-no/auth",
+                        c -> c.bankIdNo().auth(new BankIdNoAuthRequest().setRefId("order-42")),
+                        (c, id) -> c.bankIdNo().waitForAuth(id, FAST_POLL),
+                        BankIdNoStatus.Pending.class,
+                        BankIdNoStatus.Completed.class,
+                        BankIdNoStatus.Failed.class,
+                        BankIdNoStatus.Unknown.class),
+                new Flow(
+                        "freja",
+                        "/v3/freja/auth",
+                        c -> c.freja().auth(new FrejaAuthRequest().setRefId("order-42")),
+                        (c, id) -> c.freja().waitForAuth(id, FAST_POLL),
+                        FrejaStatus.Pending.class,
+                        FrejaStatus.Completed.class,
+                        FrejaStatus.Failed.class,
+                        FrejaStatus.Unknown.class),
+                new Flow(
+                        "mitid",
+                        "/v3/mitid/auth",
+                        c -> c.mitId().auth(new MitIdAuthRequest().setRefId("order-42")),
+                        (c, id) -> c.mitId().waitForAuth(id, FAST_POLL),
+                        MitIdStatus.Pending.class,
+                        MitIdStatus.Completed.class,
+                        MitIdStatus.Failed.class,
+                        MitIdStatus.Unknown.class),
+                new Flow(
+                        "ftn",
+                        "/v3/ftn/auth",
+                        c -> c.ftn().auth(new FtnAuthRequest().setRefId("order-42")),
+                        (c, id) -> c.ftn().waitForAuth(id, FAST_POLL),
+                        FtnStatus.Pending.class,
+                        FtnStatus.Completed.class,
+                        FtnStatus.Failed.class,
+                        FtnStatus.Unknown.class),
+                new Flow(
+                        "vipps",
+                        "/v3/vipps/auth",
+                        c -> c.vipps().auth(new VippsAuthRequest().setRefId("order-42")),
+                        (c, id) -> c.vipps().waitForAuth(id, FAST_POLL),
+                        VippsStatus.Pending.class,
+                        VippsStatus.Completed.class,
+                        VippsStatus.Failed.class,
+                        VippsStatus.Unknown.class));
     }
 
     static Stream<Flow> signFlows() {
         return Stream.of(
-            new Flow(
-                "bankid_se", "/v3/bankid-se/sign",
-                c -> c.bankIdSe().sign(new BankIdSeSignRequest().setText("Sign this").setRefId("order-42")),
-                (c, id) -> c.bankIdSe().waitForSign(id, FAST_POLL),
-                BankIdSeStatus.Pending.class, BankIdSeStatus.Completed.class,
-                BankIdSeStatus.Failed.class, BankIdSeStatus.Unknown.class
-            ),
-            new Flow(
-                "bankid_no", "/v3/bankid-no/sign",
-                c -> c.bankIdNo().sign(new BankIdNoSignRequest().setText("Sign this").setRefId("order-42")),
-                (c, id) -> c.bankIdNo().waitForSign(id, FAST_POLL),
-                BankIdNoStatus.Pending.class, BankIdNoStatus.Completed.class,
-                BankIdNoStatus.Failed.class, BankIdNoStatus.Unknown.class
-            ),
-            new Flow(
-                "freja", "/v3/freja/sign",
-                c -> c.freja().sign(new FrejaSignRequest().setText("Sign this").setRefId("order-42")),
-                (c, id) -> c.freja().waitForSign(id, FAST_POLL),
-                FrejaStatus.Pending.class, FrejaStatus.Completed.class,
-                FrejaStatus.Failed.class, FrejaStatus.Unknown.class
-            ),
-            new Flow(
-                "mitid", "/v3/mitid/sign",
-                c -> c.mitId().sign(new MitIdSignRequest().setText("Sign this").setRefId("order-42")),
-                (c, id) -> c.mitId().waitForSign(id, FAST_POLL),
-                MitIdStatus.Pending.class, MitIdStatus.Completed.class,
-                MitIdStatus.Failed.class, MitIdStatus.Unknown.class
-            )
-        );
+                new Flow(
+                        "bankid_se",
+                        "/v3/bankid-se/sign",
+                        c -> c.bankIdSe()
+                                .sign(new BankIdSeSignRequest()
+                                        .setText("Sign this")
+                                        .setRefId("order-42")),
+                        (c, id) -> c.bankIdSe().waitForSign(id, FAST_POLL),
+                        BankIdSeStatus.Pending.class,
+                        BankIdSeStatus.Completed.class,
+                        BankIdSeStatus.Failed.class,
+                        BankIdSeStatus.Unknown.class),
+                new Flow(
+                        "bankid_no",
+                        "/v3/bankid-no/sign",
+                        c -> c.bankIdNo()
+                                .sign(new BankIdNoSignRequest()
+                                        .setText("Sign this")
+                                        .setRefId("order-42")),
+                        (c, id) -> c.bankIdNo().waitForSign(id, FAST_POLL),
+                        BankIdNoStatus.Pending.class,
+                        BankIdNoStatus.Completed.class,
+                        BankIdNoStatus.Failed.class,
+                        BankIdNoStatus.Unknown.class),
+                new Flow(
+                        "freja",
+                        "/v3/freja/sign",
+                        c -> c.freja()
+                                .sign(new FrejaSignRequest()
+                                        .setText("Sign this")
+                                        .setRefId("order-42")),
+                        (c, id) -> c.freja().waitForSign(id, FAST_POLL),
+                        FrejaStatus.Pending.class,
+                        FrejaStatus.Completed.class,
+                        FrejaStatus.Failed.class,
+                        FrejaStatus.Unknown.class),
+                new Flow(
+                        "mitid",
+                        "/v3/mitid/sign",
+                        c -> c.mitId()
+                                .sign(new MitIdSignRequest()
+                                        .setText("Sign this")
+                                        .setRefId("order-42")),
+                        (c, id) -> c.mitId().waitForSign(id, FAST_POLL),
+                        MitIdStatus.Pending.class,
+                        MitIdStatus.Completed.class,
+                        MitIdStatus.Failed.class,
+                        MitIdStatus.Unknown.class));
     }
 
     @BeforeEach
@@ -161,8 +191,8 @@ class EndToEndTest {
         server = new MockWebServer();
         server.start();
         client = new IdentisureClientBuilder("cid", "secret")
-            .baseUrl(server.url("/").toString())
-            .build();
+                .baseUrl(server.url("/").toString())
+                .build();
     }
 
     @AfterEach
@@ -214,8 +244,8 @@ class EndToEndTest {
         enqueue(200, "bankid_se/auth_completed.json");
 
         var started = client.bankIdSe()
-            .phoneAuth(new BankIdSePhoneAuthRequest().setSsn("199001011239"))
-            .get(5, TimeUnit.SECONDS);
+                .phoneAuth(new BankIdSePhoneAuthRequest().setSsn("199001011239"))
+                .get(5, TimeUnit.SECONDS);
         var pending = assertInstanceOf(BankIdSePhoneStatus.Pending.class, started);
         var result = client.bankIdSe().waitForAuth(pending.id, FAST_POLL).get(5, TimeUnit.SECONDS);
 
@@ -231,8 +261,8 @@ class EndToEndTest {
         enqueue(200, "bankid_se/verify.json");
 
         var result = client.bankIdSe()
-            .verify(new BankIdSeVerifyRequest().setQrCode("qr-code"))
-            .get(5, TimeUnit.SECONDS);
+                .verify(new BankIdSeVerifyRequest().setQrCode("qr-code"))
+                .get(5, TimeUnit.SECONDS);
 
         assertRequest("POST", "/v3/bankid-se/verify");
         assertMatchesFixture(fixture("bankid_se/verify.json"), result);
@@ -266,9 +296,8 @@ class EndToEndTest {
     void documentUpload() throws Exception {
         enqueue(201, "document/upload.json");
 
-        var result = client.document()
-            .upload("%PDF-1.7".getBytes(), "contract.pdf")
-            .get(5, TimeUnit.SECONDS);
+        var result =
+                client.document().upload("%PDF-1.7".getBytes(), "contract.pdf").get(5, TimeUnit.SECONDS);
 
         var request = assertRequest("POST", "/v3/document");
         assertTrue(request.getHeader("Content-Type").startsWith("multipart/form-data"));
@@ -280,9 +309,8 @@ class EndToEndTest {
         enqueue(400, "error.json");
 
         var thrown = assertThrows(
-            CompletionException.class,
-            () -> client.ftn().auth(new FtnAuthRequest()).join()
-        );
+                CompletionException.class,
+                () -> client.ftn().auth(new FtnAuthRequest()).join());
 
         var error = assertInstanceOf(IdentisureError.class, thrown.getCause());
         assertEquals("api", error.code);
@@ -305,7 +333,9 @@ class EndToEndTest {
         var result = flow.waitFor().apply(client, id).get(5, TimeUnit.SECONDS);
 
         var start = assertRequest("POST", flow.path());
-        assertEquals("order-42", PLAIN.readTree(start.getBody().readUtf8()).get("refId").asText());
+        assertEquals(
+                "order-42",
+                PLAIN.readTree(start.getBody().readUtf8()).get("refId").asText());
         assertRequest("GET", flow.path() + "/" + id);
         assertRequest("GET", flow.path() + "/" + id);
 
@@ -318,12 +348,13 @@ class EndToEndTest {
         enqueue(200, "age_verification/" + resultFixture);
 
         var started = client.bankIdSe()
-            .ageVerification(new AgeVerificationRequest().setMinAge(18))
-            .get(5, TimeUnit.SECONDS);
+                .ageVerification(new AgeVerificationRequest().setMinAge(18))
+                .get(5, TimeUnit.SECONDS);
         var pending = assertInstanceOf(AgeVerificationStatus.Pending.class, started);
         assertMatchesFixture(fixture("age_verification/pending.json"), pending);
 
-        var result = client.bankIdSe().waitForAgeVerification(pending.id, FAST_POLL).get(5, TimeUnit.SECONDS);
+        var result =
+                client.bankIdSe().waitForAgeVerification(pending.id, FAST_POLL).get(5, TimeUnit.SECONDS);
 
         assertRequest("POST", "/v3/bankid-se/age-verification");
         assertRequest("GET", "/v3/bankid-se/age-verification/" + pending.id);
@@ -334,9 +365,9 @@ class EndToEndTest {
 
     private void enqueue(int status, String fixturePath) throws IOException {
         server.enqueue(new MockResponse()
-            .setResponseCode(status)
-            .setHeader("Content-Type", "application/json")
-            .setBody(Files.readString(FIXTURES.resolve(fixturePath))));
+                .setResponseCode(status)
+                .setHeader("Content-Type", "application/json")
+                .setBody(Files.readString(FIXTURES.resolve(fixturePath))));
     }
 
     private RecordedRequest assertRequest(String method, String path) throws InterruptedException {

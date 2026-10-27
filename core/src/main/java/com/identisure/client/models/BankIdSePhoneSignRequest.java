@@ -16,6 +16,8 @@ public class BankIdSePhoneSignRequest {
     public @Nullable Boolean requestAddress;
     public @Nullable String refId;
 
+    public BankIdSePhoneSignRequest() {}
+
     public BankIdSePhoneSignRequest setSsn(String v) {
         ssn = v;
         return this;

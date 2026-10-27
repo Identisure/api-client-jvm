@@ -15,6 +15,8 @@ public class FrejaBackchannelSignRequest {
     public @Nullable Boolean requestAddress;
     public @Nullable String refId;
 
+    public FrejaBackchannelSignRequest() {}
+
     public FrejaBackchannelSignRequest setSsn(String v) {
         ssn = v;
         return this;

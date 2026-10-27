@@ -11,6 +11,8 @@ public class MitIdBackchannelAuthRequest {
     public @Nullable String callbackUrl;
     public @Nullable String refId;
 
+    public MitIdBackchannelAuthRequest() {}
+
     public MitIdBackchannelAuthRequest setSsn(String v) {
         ssn = v;
         return this;

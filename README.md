@@ -108,3 +108,12 @@ $ gradle compileKotlin
 ```sh
 $ gradle test
 ```
+
+#### Format and lint
+
+Formatting is checked with Spotless (palantir-java-format for Java, ktfmt for Kotlin). Compiler warnings fail the build.
+
+```sh
+$ gradle spotlessCheck
+$ gradle spotlessApply
+```

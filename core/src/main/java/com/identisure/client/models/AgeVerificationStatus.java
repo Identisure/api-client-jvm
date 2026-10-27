@@ -8,31 +8,47 @@ import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 
 /** Age verification session status. Discriminated by the {@code status} JSON field. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "status", visible = true, defaultImpl = AgeVerificationStatus.Unknown.class)
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        property = "status",
+        visible = true,
+        defaultImpl = AgeVerificationStatus.Unknown.class)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = AgeVerificationStatus.Pending.class, name = "PENDING"),
     @JsonSubTypes.Type(value = AgeVerificationStatus.Completed.class, name = "COMPLETED"),
     @JsonSubTypes.Type(value = AgeVerificationStatus.Failed.class, name = "FAILED"),
 })
-public abstract sealed class AgeVerificationStatus permits AgeVerificationStatus.Pending, AgeVerificationStatus.Completed, AgeVerificationStatus.Failed, AgeVerificationStatus.Unknown {
+public abstract sealed class AgeVerificationStatus
+        permits AgeVerificationStatus.Pending,
+                AgeVerificationStatus.Completed,
+                AgeVerificationStatus.Failed,
+                AgeVerificationStatus.Unknown {
+    private AgeVerificationStatus() {}
+
     /** Returned while the user has not yet completed age verification. */
     public static final class Pending extends AgeVerificationStatus {
         public String id = "";
         public @Nullable String url;
         public @Nullable Integer minAge;
         public @Nullable Integer maxAge;
+
+        public Pending() {}
     }
 
     /** Returned when the age verification session has completed. */
     public static final class Completed extends AgeVerificationStatus {
         public String id = "";
         public boolean ageVerified;
+
+        public Completed() {}
     }
 
     /** Returned when the age verification session has failed. */
     public static final class Failed extends AgeVerificationStatus {
         public String id = "";
         public ApiErrorCode error = ApiErrorCode.INTERNAL_ERROR;
+
+        public Failed() {}
     }
 
     /** A status this client version does not recognize. */

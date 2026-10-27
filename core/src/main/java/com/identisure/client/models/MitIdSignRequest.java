@@ -10,6 +10,8 @@ public class MitIdSignRequest {
     public @Nullable String redirectUrl;
     public @Nullable String refId;
 
+    public MitIdSignRequest() {}
+
     public MitIdSignRequest setText(String v) {
         text = v;
         return this;

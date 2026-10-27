@@ -14,6 +14,8 @@ public class AgeVerificationRequest {
     public @Nullable String callbackUrl;
     public @Nullable String redirectUrl;
 
+    public AgeVerificationRequest() {}
+
     public AgeVerificationRequest setMinAge(@Nullable Integer v) {
         minAge = v;
         return this;
