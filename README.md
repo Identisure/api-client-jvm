@@ -2,21 +2,32 @@
 
 # Identisure JVM Client
 
-[![Crate][crate-image]][crate-url]
-[![Downloads][downloads-image]][downloads-url]
+[![Maven Central][maven-image]][maven-url]
 [![Documentation][docs-image]][docs-url]
 [![MIT license][license-image]][license-url]
 
-[crate-image]: https://img.shields.io/crates/v/identisure-client?style=flat-square
-[crate-url]: https://crates.io/crates/identisure-client
-[downloads-image]: https://img.shields.io/crates/d/identisure-client?style=flat-square
-[downloads-url]: https://crates.io/crates/identisure-client
-[docs-image]: https://img.shields.io/docsrs/identisure-client?style=flat-square
-[docs-url]: https://docs.rs/identisure-client
+[maven-image]: https://img.shields.io/maven-central/v/com.identisure/identisure-client-core?style=flat-square
+[maven-url]: https://central.sonatype.com/artifact/com.identisure/identisure-client-core
+[docs-image]: https://javadoc.io/badge2/com.identisure/identisure-client-core/javadoc.svg?style=flat-square
+[docs-url]: https://javadoc.io/doc/com.identisure/identisure-client-core
 [license-image]: https://img.shields.io/badge/license-MIT-blue?style=flat-square
 [license-url]: https://opensource.org/licenses/MIT
 
-API client for the [Identisure](https://identisure.com) REST API on the JVM (Java, Kotlin, Scala).
+API client for the [Identisure](https://developers.identisure.com) REST API on the JVM (Java, Kotlin, Scala).
+
+## Requirements
+
+Java 17 or later.
+
+## Supported providers
+
+- **BankID SE**: auth, sign, phone auth and sign, QR verify, age verification
+- **BankID NO**: auth, backchannel auth, sign, age verification
+- **Freja eID**: auth, backchannel auth, sign, backchannel sign, age verification
+- **MitID**: auth, backchannel auth, sign, age verification
+- **FTN** (Finnish Trust Network): auth, age verification
+- **Vipps MobilePay**: auth, backchannel auth
+- **Documents**: upload and download documents for signing
 
 ## Installation
 
@@ -123,3 +134,7 @@ Formatting is checked with Spotless (palantir-java-format for Java, ktfmt for Ko
 $ gradle spotlessCheck
 $ gradle spotlessApply
 ```
+
+## Other languages
+
+[C#](https://github.com/identisure/api-client-csharp), [Dart](https://github.com/identisure/api-client-dart), [Go](https://github.com/identisure/api-client-go), [TypeScript/JavaScript](https://github.com/identisure/api-client-js), [PHP](https://github.com/identisure/api-client-php), [Python](https://github.com/identisure/api-client-py), [Ruby](https://github.com/identisure/api-client-ruby), [Rust](https://github.com/identisure/api-client-rust), [Swift](https://github.com/identisure/api-client-swift)
