@@ -53,7 +53,7 @@ publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
-            artifactId = "identisure-client-core"
+            artifactId = "identisure-client"
             pom {
                 name.set("Identisure Client Core")
                 description.set("Java client for the Identisure REST API")
