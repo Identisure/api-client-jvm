@@ -44,9 +44,11 @@ tasks.test {
 }
 
 tasks.javadoc {
+    // javadoc documents every source file it is given, ignoring --show-packages, so hide the internal
+    // package by excluding it and let javadoc resolve its types from the source path instead.
+    exclude("com/identisure/client/internal/**")
     val opts = options as StandardJavadocDocletOptions
+    opts.addStringOption("-source-path", file("src/main/java").path)
     opts.addBooleanOption("Xdoclint:none", true)
-    // Only document exported packages — hide com.identisure.client.internal.
-    opts.addStringOption("-show-packages", "exported")
     opts.addStringOption("-show-module-contents", "api")
 }
