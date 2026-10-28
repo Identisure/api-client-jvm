@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"com.identisure.client","l":"com.identisure.client"},{"m":"com.identisure.client","l":"com.identisure.client.models"}];updateSearchResults();
