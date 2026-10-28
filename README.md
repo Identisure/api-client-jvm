@@ -8,12 +8,14 @@
 
 [maven-image]: https://img.shields.io/maven-central/v/com.identisure/identisure-client?style=flat-square
 [maven-url]: https://central.sonatype.com/artifact/com.identisure/identisure-client
-[docs-image]: https://javadoc.io/badge2/com.identisure/identisure-client/javadoc.svg?style=flat-square
-[docs-url]: https://javadoc.io/doc/com.identisure/identisure-client
+[docs-image]: https://img.shields.io/badge/github-docs-orange?logo=github&style=flat-square
+[docs-url]: https://identisure.github.io/api-client-jvm
 [license-image]: https://img.shields.io/badge/license-MIT-blue?style=flat-square
 [license-url]: https://opensource.org/licenses/MIT
 
 API client for the [Identisure](https://developers.identisure.com) REST API on the JVM (Java, Kotlin, Scala).
+
+Documentation: [identisure.github.io/api-client-jvm](https://identisure.github.io/api-client-jvm)
 
 ## Requirements
 
